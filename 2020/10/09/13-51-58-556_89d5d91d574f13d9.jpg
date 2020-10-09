@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="ahrefs-site-verification" content="b21134b1225ebf149e1266990fcc7b2bb3d9812fb4c9cdb1db0e5b103b2be6d2">
+    <link rel="profile" href="http://gmpg.org/xfn/11"/>
+    <link rel="shortcut icon" href="https://www.sqlservercentral.com/wp-content/uploads/2019/04/favicon.ico" />
+    <link rel="pingback" href="https://www.sqlservercentral.com/xmlrpc.php"/>
+    <title>PowerShell Day by Day: Filtering Objects &ndash; SQLServerCentral</title>
+
+            <meta name="wp:id" content="3792395" />
+        
+<!-- This site is optimized with the Yoast SEO plugin v11.6 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="In my last article, The Basics of PowerShell Day By Day, I covered some basics of getting started. These articles aren&#039;t intended to replace some of the"/>
+<link rel="canonical" href="https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="PowerShell Day by Day: Filtering Objects &ndash; SQLServerCentral" />
+<meta property="og:description" content="In my last article, The Basics of PowerShell Day By Day, I covered some basics of getting started. These articles aren&#039;t intended to replace some of the" />
+<meta property="og:url" content="https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects" />
+<meta property="og:site_name" content="SQLServerCentral" />
+<meta property="article:section" content="PowerShell" />
+<meta property="og:image" content="https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a.png" />
+<meta property="og:image:secure_url" content="https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:description" content="In my last article, The Basics of PowerShell Day By Day, I covered some basics of getting started. These articles aren&#039;t intended to replace some of the" />
+<meta name="twitter:title" content="PowerShell Day by Day: Filtering Objects &ndash; SQLServerCentral" />
+<meta name="twitter:site" content="@sqlservercentrl" />
+<meta name="twitter:image" content="https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a.png" />
+<meta name="twitter:creator" content="@sqlservercentrl" />
+<script type='application/ld+json' class='yoast-schema-graph yoast-schema-graph--main'>{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.sqlservercentral.com/#organization","name":"SQLServerCentral","url":"https://www.sqlservercentral.com/","sameAs":["https://twitter.com/sqlservercentrl"],"logo":{"@type":"ImageObject","@id":"https://www.sqlservercentral.com/#logo","url":"https://www.sqlservercentral.com/wp-content/uploads/2019/05/ssc-logo.png","width":60,"height":53,"caption":"SQLServerCentral"},"image":{"@id":"https://www.sqlservercentral.com/#logo"}},{"@type":"WebSite","@id":"https://www.sqlservercentral.com/#website","url":"https://www.sqlservercentral.com/","name":"SQLServerCentral","publisher":{"@id":"https://www.sqlservercentral.com/#organization"},"potentialAction":{"@type":"SearchAction","target":"https://www.sqlservercentral.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects#primaryimage","url":"https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a.png","width":440,"height":248,"caption":"One login in object list"},{"@type":"WebPage","@id":"https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects#webpage","url":"https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects","inLanguage":"en-GB","name":"PowerShell Day by Day: Filtering Objects &ndash; SQLServerCentral","isPartOf":{"@id":"https://www.sqlservercentral.com/#website"},"primaryImageOfPage":{"@id":"https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects#primaryimage"},"datePublished":"2020-10-08T00:00:02+00:00","dateModified":"2020-10-06T22:17:01+00:00","description":"In my last article, The Basics of PowerShell Day By Day, I covered some basics of getting started. These articles aren't intended to replace some of the"}]}</script>
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//cdn.rawgit.com' />
+<link rel='dns-prefetch' href='//cdnjs.cloudflare.com' />
+<link rel='dns-prefetch' href='//www.sqlservercentral.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="SQLServerCentral &raquo; Feed" href="https://www.sqlservercentral.com/feed" />
+<link rel="alternate" type="application/rss+xml" title="SQLServerCentral &raquo; Comments Feed" href="https://www.sqlservercentral.com/comments/feed" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11.2.0\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/11.2.0\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/www.sqlservercentral.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.1.1"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55358,56760,9792,65039],[55358,56760,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<!-- managing ads with Advanced Ads – https://wpadvancedads.com/ --><script>
+					advanced_ads_ready=function(){var fns=[],listener,doc=typeof document==="object"&&document,hack=doc&&doc.documentElement.doScroll,domContentLoaded="DOMContentLoaded",loaded=doc&&(hack?/^loaded|^c/:/^loaded|^i|^c/).test(doc.readyState);if(!loaded&&doc){listener=function(){doc.removeEventListener(domContentLoaded,listener);window.removeEventListener("load",listener);loaded=1;while(listener=fns.shift())listener()};doc.addEventListener(domContentLoaded,listener);window.addEventListener("load",listener)}return function(fn){loaded?setTimeout(fn,0):fns.push(fn)}}();
+			</script><style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='wp-block-library-css'  href='https://www.sqlservercentral.com/wp-includes/css/dist/block-library/style.min.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='wp-block-library-css'  href='https://www.sqlservercentral.com/wp-includes/css/dist/block-library/style.min.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-widgets-mini-teaser-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-widgets/css/mini-teaser.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-widgets-mini-teaser-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-widgets/css/mini-teaser.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-bbp-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-bbp/css/ssc-bbp.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-bbp-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-bbp/css/ssc-bbp.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-briefcase-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-briefcase/css/ssc-briefcase.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-briefcase-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-briefcase/css/ssc-briefcase.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-contributions-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-contributions/css/contributions.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-contributions-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-contributions/css/contributions.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-leaderboard-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-leaderboard/css/leaderboard.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-leaderboard-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-leaderboard/css/leaderboard.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-related-forum-topics-top-comments-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-related-forum-topics/css/top-comments.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-related-forum-topics-top-comments-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-related-forum-topics/css/top-comments.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-social-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-social/css/icons.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-social-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-social/css/icons.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-star-ratings-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-star-ratings/css/ssc-star-ratings.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-star-ratings-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-star-ratings/css/ssc-star-ratings.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlighting-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/syntax-highlighting.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlighting-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/syntax-highlighting.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlighting-legacy-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/legacy.min.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlighting-legacy-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/css/legacy.min.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlightjs-default-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/default.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlightjs-default-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/default.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlightjs-ssms-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/ssms.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlightjs-ssms-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/ssms.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-syntax-highlightjs-custom-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/custom.css?ver=2020-06-03' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-syntax-highlightjs-custom-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/css/custom.css?ver=2020-06-03' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='featherlight-css-css'  href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='featherlight-css-css'  href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.min.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc-lightbox-css-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-lightbox/css/ssc-lightbox.min.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc-lightbox-css-css'  href='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-lightbox/css/ssc-lightbox.min.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='bbp-default-css'  href='https://www.sqlservercentral.com/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.14-6684' type='text/css' media='screen' />
+<noscript><link rel='stylesheet' id='bbp-default-css'  href='https://www.sqlservercentral.com/wp-content/plugins/bbpress/templates/default/css/bbpress.css?ver=2.5.14-6684' type='text/css' media='screen' /></noscript>
+
+<link rel='stylesheet' id='bbp-ssc-css'  href='https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/bbpress/bbpress.min.css?ver=2.5.14-6684' type='text/css' media='screen' />
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='gglcptch-css'  href='https://www.sqlservercentral.com/wp-content/plugins/google-captcha/css/gglcptch.css?ver=1.39' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='gglcptch-css'  href='https://www.sqlservercentral.com/wp-content/plugins/google-captcha/css/gglcptch.css?ver=1.39' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='hm_bbpui-css'  href='https://www.sqlservercentral.com/wp-content/plugins/image-upload-for-bbpress/css/bbp-image-upload.css?ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='hm_bbpui-css'  href='https://www.sqlservercentral.com/wp-content/plugins/image-upload-for-bbpress/css/bbp-image-upload.css?ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='searchandfilter-css'  href='https://www.sqlservercentral.com/wp-content/plugins/search-filter/style.css?ver=1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='searchandfilter-css'  href='https://www.sqlservercentral.com/wp-content/plugins/search-filter/style.css?ver=1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='ssc2018-googlefonts-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A400%2C600&#038;ver=5.1.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='ssc2018-googlefonts-css'  href='//fonts.googleapis.com/css?family=Open+Sans%3A400%2C600&#038;ver=5.1.1' type='text/css' media='all' /></noscript>
+
+<link rel='stylesheet' id='ssc2018-stylesheet-css'  href='https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/css/style.css?ver=2020-06-03' type='text/css' media='all' />
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='d4p-bbattachments-css-css'  href='https://www.sqlservercentral.com/wp-content/plugins/gd-bbpress-attachments/css/front.css?ver=3.1_b2302_free' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='d4p-bbattachments-css-css'  href='https://www.sqlservercentral.com/wp-content/plugins/gd-bbpress-attachments/css/front.css?ver=3.1_b2302_free' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='simple-favorites-css'  href='https://www.sqlservercentral.com/wp-content/plugins/favorites/assets/css/favorites.css?ver=2.3.1' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='simple-favorites-css'  href='https://www.sqlservercentral.com/wp-content/plugins/favorites/assets/css/favorites.css?ver=2.3.1' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='wp-user-avatar-css'  href='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/css/wp-user-avatar.css?ver=4.1.8' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='wp-user-avatar-css'  href='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/css/wp-user-avatar.css?ver=4.1.8' type='text/css' media='all' /></noscript>
+
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" id='jcrop-css'  href='https://www.sqlservercentral.com/wp-includes/js/jcrop/jquery.Jcrop.min.css?ver=0.9.12' type='text/css' media='all' />
+<noscript><link rel='stylesheet' id='jcrop-css'  href='https://www.sqlservercentral.com/wp-includes/js/jcrop/jquery.Jcrop.min.css?ver=0.9.12' type='text/css' media='all' /></noscript>
+
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript' defer src='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js?ver=5.1.1'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-lightbox/js/ssc-lightbox.min.js?ver=5.1.1'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/image-upload-for-bbpress/js/bbp-image-upload.js?ver=5.1.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var favorites_data = {"ajaxurl":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","nonce":"c7b45a0aba","favorite":"Add to briefcase <i class=\"sf-icon-star-empty\"><\/i>","favorited":"Remove from briefcase <i class=\"sf-icon-star-full\"><\/i>","includecount":"","indicate_loading":"","loading_text":"Loading","loading_image":"","loading_image_active":"","loading_image_preload":"","cache_enabled":"1","button_options":{"button_type":"custom","custom_colors":false,"box_shadow":false,"include_count":false,"default":{"background_default":false,"border_default":false,"text_default":false,"icon_default":false,"count_default":false},"active":{"background_active":false,"border_active":false,"text_active":false,"icon_active":false,"count_active":false}},"authentication_modal_content":"<p>Please login to add favorites.<\/p><p><a href=\"#\" data-favorites-modal-close>Dismiss this notice<\/a><\/p>","authentication_redirect":"","dev_mode":"","logged_in":"","user_id":"0","authentication_redirect_url":"https:\/\/www.sqlservercentral.com\/wp-login.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/favorites/assets/js/favorites.min.js?ver=2.3.1'></script>
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/jcrop/jquery.Jcrop.min.js?ver=0.9.12'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/js/webcam.js?ver=4.1.8'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var wpua_imgloader_vars = {"url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","WPUA_URL":"https:\/\/www.sqlservercentral.com\/wp-content\/plugins\/wp-user-avatar-pro\/","WPUA_MEDIA":"false","wpua_webcam":"true","wpua_string":{"file_type_error":"File Type is not valid.","file_type_error_description":"Valid File Type is jpeg, png and gif.","file_size_error":"File Size is too big","file_size_error_description":"File uploading limits:  Size 8.00 MB","no_image":"Oops! Seems you didn't select any image.","no_image_instruction":"It's easy. Click within dotted area.","upload_image":"Upload Image","media_uploader":"Media Uploader","drop_instruction":"Drop image here or click to upload.","control_instruction":"Select your image, crop and save it.","close":"Close","save":"Save Image","capture_image":"Capture Image","webcam_on":"Use Camera","mediamanager_on_title":"Media Manager is turned ON.","mediamanager_on_instruction":"Click within dotted area to choose image from media manager"},"restriction":{"strickly_resize":true,"max_file_size":"8388608","max_file_width":0,"max_file_height":0,"wp_user_avatar_thumbnail_w":false,"wp_user_avatar_thumbnail_h":false}};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/wp-user-avatar-pro/assets/js/wpua-imgloader.js?ver=4.1.8'></script>
+<link rel='https://api.w.org/' href='https://www.sqlservercentral.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://www.sqlservercentral.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://www.sqlservercentral.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 5.1.1" /><meta name="projectnami:version" content="2.1.1" />
+<link rel='shortlink' href='https://www.sqlservercentral.com/?p=3792395' />
+<link rel="alternate" type="application/json+oembed" href="https://www.sqlservercentral.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fpowershell-day-by-day-filtering-objects" />
+<link rel="alternate" type="text/xml+oembed" href="https://www.sqlservercentral.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fpowershell-day-by-day-filtering-objects&#038;format=xml" />
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-90206-6"></script>
+<script>
+    const sites = [
+        'www.red-gate.com',
+        'www.sqlservercentral.com',
+        'documentation.red-gate.com',
+        'sqlmonitormetrics.red-gate.com'
+    ];
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());  
+     gtag('config', 'UA-90206-6');
+     gtag('config', 'UA-90206-169', { 'linker': { 'domains': sites } });
+</script><script type="text/javascript">
+            /* <![CDATA[ */
+            var gdbbPressAttachmentsInit = {
+                max_files: 10            };
+            /* ]]> */
+        </script>			<style>
+			.avatar_overlays p  {
+ 				background: rgba(0, 0, 0, );
+ 				color: ;
+				}
+			.wpuap_tooltip:hover .wpuap_tooltip_content {
+		    display: inline;
+		    position: absolute;
+		    color: ;
+		    border: 1px solid ;
+		    background: 			}
+
+			.avatar_container [class^=icon-],
+			.avatar_container [class*=" icon-"] {
+			    color:  !important;
+			}
+
+			#ci-modal,.ci_controls {
+			    background-color:  !important;
+			}
+						</style>
+		</head>
+
+<body class="ssc_article-template-default single single-ssc_article postid-3792395" itemscope itemtype="http://schema.org/WebPage" >
+
+<div id="page" class="hfeed site">
+
+    <!-- HEADER -->
+    <header class="site-header band header--primary">
+        <nav>
+            <div class="header--primary__nav__inner">
+                <a href="https://www.sqlservercentral.com/" title="SQLServerCentral" rel="home" class="header--primary__app-logo-container"><img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc-logo.svg" alt="" /></a>
+                <a href="https://www.sqlservercentral.com/" title="SQLServerCentral" rel="home" class="header--primary__app-name-container "><img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc.svg" alt="" /></a>
+                <ul class="js-dropdown hide-on-medium">
+                    <li id="menu-item-7" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-7"><a href="/articles">Articles</a></li>
+<li id="menu-item-8" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8"><a href="/editorials">Editorials</a></li>
+<li id="menu-item-9" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9"><a href="/stairways">Stairways</a></li>
+<li id="menu-item-10" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-10"><a href="/forums">Forums</a>
+<ul class="sub-menu">
+	<li id="menu-item-16" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-16"><a title="Top level for all forums" href="/forums">Forums home</a></li>
+	<li id="menu-item-3052410" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3052410"><a title="Threads listed in reverse order by the most recent reply" href="/forums/view/topics-freshness">Active threads</a></li>
+	<li id="menu-item-18" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18"><a title="Threads listed in reverse order by the creation date" href="/forums/view/latest-topics">Latest topics</a></li>
+	<li id="menu-item-17" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17"><a title="Most replies in the last 24 hours" href="/forums/view/popular">Most popular</a></li>
+	<li id="menu-item-3644583" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3644583"><a href="/totalscores#leaderboard-forum">Leaderboard</a></li>
+</ul>
+</li>
+<li id="menu-item-11" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11"><a href="/scripts">Scripts</a></li>
+<li id="menu-item-12" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12"><a href="/questions">QotD</a></li>
+<li id="menu-item-13" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13"><a href="/books">Books</a></li>
+<li id="menu-item-14" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14"><a href="https://ask.sqlservercentral.com/">Ask SSC</a></li>
+<li id="menu-item-15" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15"><a href="/blogs">Blogs</a></li>
+                </ul>
+
+                <span class="header--primary__site-tools">
+                    <ul>
+                        <li class="hide-on-medium"><a href="/contributions"><span class="icon--edit"></span>Write for us</a></li>
+                        <li class="hide-on-max show-on-medium"><a href="/search" class="header--primary__icon icon--search" title="Search"></a></li>
+                        <li class="hide-on-max show-on-large"><a href="" class="header--primary__icon header--primary__menu-button">Menu</a></li>
+                    </ul>
+                    <ul class="js-dropdown dropdown hide-on-small">
+                                                    <li><a href="https://www.sqlservercentral.com/wp-login.php?action=register">Register</a></li>
+                            <li><a href="https://www.sqlservercentral.com/wp-login.php?redirect_to=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fpowershell-day-by-day-filtering-objects">Login</a></li>
+                                            </ul>
+                </span>
+            </div>
+
+            <ul class="header--primary__menu--mobile js-dropdown">
+                <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item menu-item-7"><a href="/articles">Articles</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-8"><a href="/editorials">Editorials</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-9"><a href="/stairways">Stairways</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-10"><a href="/forums">Forums</a>
+<ul class="sub-menu">
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-16"><a title="Top level for all forums" href="/forums">Forums home</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3052410"><a title="Threads listed in reverse order by the most recent reply" href="/forums/view/topics-freshness">Active threads</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-18"><a title="Threads listed in reverse order by the creation date" href="/forums/view/latest-topics">Latest topics</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-17"><a title="Most replies in the last 24 hours" href="/forums/view/popular">Most popular</a></li>
+	<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-3644583"><a href="/totalscores#leaderboard-forum">Leaderboard</a></li>
+</ul>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-11"><a href="/scripts">Scripts</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-12"><a href="/questions">QotD</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-13"><a href="/books">Books</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-14"><a href="https://ask.sqlservercentral.com/">Ask SSC</a></li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-15"><a href="/blogs">Blogs</a></li>
+
+                                <li class="menu-item"><a href="/contributions">Write for us</a></li>
+
+                                    <li><a href="https://www.sqlservercentral.com/wp-login.php?action=register">Register</a></li>
+                    <li><a href="https://www.sqlservercentral.com/wp-login.php?redirect_to=https%3A%2F%2Fwww.sqlservercentral.com%2Farticles%2Fpowershell-day-by-day-filtering-objects">Login</a></li>
+                            </ul>
+        </nav>
+    </header>
+    <!-- /HEADER -->
+
+    <!-- SECONDARY NAV -->
+    <nav class="background-color--grey--1 border-bottom border-color--grey--3 nav-secondary">
+        <div class="band__inner-container border-left border-right border-color--grey--3 padded--none">
+            <form class="search display--inline border-left border-right border-color--grey--3 padded-right--tight float-right" action="https://www.sqlservercentral.com/" method="get">
+                <input type="text" name="s" placeholder="Search..." value=""/>
+                <input type="image" src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/nav-secondary/search-icon.svg"/>
+            </form>
+        </div>
+    </nav>
+    <!-- /SECONDARY NAV -->
+
+    
+    
+<!-- single.php -->
+    <!-- template-parts/content-single.php -->
+<div class="band">
+    <div class="band__inner-container padded--tight--small grid" itemscope itemtype="http://schema.org/Article" datePublished="">
+
+        <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+            <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+                <meta itemprop="url" content="https://www.sqlservercentral.com/wp-content/uploads/2019/05/ssc-logo.png">
+                <meta itemprop="width" content="60"> <meta itemprop="height" content="53">
+            </div>
+            <meta itemprop="name" content="SQLServerCentral.com">
+        </div>
+
+        <meta itemprop="mainEntityOfPage" content="https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects">
+
+        <div class="grid__col grid__col--span-2-of-12 hide-on-small content-single-sidebar-left">
+            
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/powershell.svg" alt="" /></a>
+    </div>
+<img class="hidden" itemprop="image" src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/powershell.png" alt="" />        </div>
+
+        <div class="grid__col grid__col--span-8-of-12">
+            <div class="padded-h spaced-bottom padded-h--none--small">
+                <h1 class="text--bold" itemprop="name">PowerShell Day by Day: Filtering Objects</h1>
+                <meta itemprop="headline" content="PowerShell Day by Day: Filtering Objects">
+                <div class="meta spaced-bottom--tight">
+                    <p class="gamma">
+                        <a href="https://www.sqlservercentral.com/author/frankdolan77" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">FrankDolan77</span></span></a>,
+                        <span itemprop="datePublished"><span itemprop="dateCreated">2020-10-08</span></span>
+                        <meta itemprop="dateModified" content="October 6, 2020">
+                        <br />
+                    </p>
+                </div>
+
+                <div class="content" itemprop="articleBody">
+                    <p>In my last article, The Basics of <a href="https://www.sqlservercentral.com/articles/the-basics-of-powershell-day-by-day">PowerShell Day By Day</a>, I covered some basics of getting started. These articles aren't intended to replace some of the getting started information in things like the <a href="https://www.sqlservercentral.com/stairways/stairway-to-sql-powershell">Stairway to PowerShell</a>. Instead, I am covering some of the tips, tricks, techniques, and bits of knowledge that I wish I'd have known early on when I started working with PoSh.</p>
+<p>In this article, I want to look at comparisons and filtering of things out of the objects that we get when we run PoSh code. These were things that I struggled with early on, and it took me some time to get used to the syntax and structure of how to link objects together to get things done. We'll start looking at the comparison operators and then the Select-Object and Where-Object structures.</p>
+<h2>Comparing Things</h2>
+<p>In every language that I have used in my career, comparisons between variables were done with standard operators. For example, in C#, I'd do this:</p>
+<pre class="prettyprint  lang-mssql">int x = 4;
+int y = 2;
+if (x &gt; y) { Console.WriteLine("X is greater"); };</pre>
+<p>Many of us have gotten used to the greater than (&gt;), less than (&lt;), equality (= or ==), and inequality (!= or &lt;&gt;) operators in our programming lives. There is some inconsistency here, especially with the = and == operations, which can vary by language, but lots of people have muscle memory in using these symbols in code.</p>
+<p>That changes in PowerShell.</p>
+<h3>Use Parameters</h3>
+<p>In PowerShell we what look like parameters to specify a comparison operation. Let me show what I mean. I can write this code:</p>
+<pre class="prettyprint  lang-mssql">$x = 100
+$y = 50
+if ($x -gt $y) {write-host("x is greater")}</pre>
+<p>This will print out "x is greater" at the console, but the main thing is the comparison. I need to use the -gt to represent greater than. In PowerShell, here are the mappings.</p>
+<table>
+<tbody>
+<tr>
+<td><strong>Comparison</strong></td>
+<td><strong>T-SQL</strong></td>
+<td><strong>PowerShell</strong></td>
+</tr>
+<tr>
+<td>Equals</td>
+<td>=</td>
+<td>-eq</td>
+</tr>
+<tr>
+<td>Greater than</td>
+<td>&gt;</td>
+<td>-gt</td>
+</tr>
+<tr>
+<td>Less than</td>
+<td>&lt;</td>
+<td>-lt</td>
+</tr>
+<tr>
+<td>Greater than or equal</td>
+<td>&gt;=</td>
+<td>-ge</td>
+</tr>
+<tr>
+<td>Less than or equal</td>
+<td>&lt;=</td>
+<td>-le</td>
+</tr>
+<tr>
+<td>Not equal</td>
+<td>&lt;&gt;</td>
+<td>-ne</td>
+</tr>
+<tr>
+<td>Not equal</td>
+<td>!=</td>
+<td>-ne</td>
+</tr>
+<tr>
+<td>Not less than</td>
+<td>!&lt;</td>
+<td>-ge</td>
+</tr>
+<tr>
+<td>Not greater than</td>
+<td>!&gt;</td>
+<td>-le</td>
+</tr>
+<tr>
+<td>Like</td>
+<td>LIKE</td>
+<td>-like</td>
+</tr>
+<tr>
+<td>Not Like</td>
+<td>NOT LIKE</td>
+<td>-notlike</td>
+</tr>
+</tbody>
+</table>
+<p>I've included the LIKE options, since this maps to the work many of us perform in SQL Server, and it is useful in PowerShell as well. <a href="https://docs.microsoft.com/en-us/sql/t-sql/language-elements/comparison-operators-transact-sql?view=sql-server-ver15">The T-SQL comparison operators</a> are on the Docs site, as are <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comparison_operators?view=powershell-7">the PowerShell operators</a>.</p>
+<p>There are a few other operators for use with Regex, but those get more complex quickly.</p>
+<h3>Examples</h3>
+<p>We can use these with variables or properties in PoSh to compare items to each other in some way, as I showed in the code above. For example, if I get two objects, I can compare parts of them together. I'll use dbatools here to get a list of logins on an Instance:</p>
+<pre class="prettyprint  lang-mssql">$logins = Get-DbaLogin -SqlInstance DevFrankD</pre>
+<p>This returns an object of logins, of which there are many. I can get properties of any object by using an index, for example, if I use the [1] index, I get the properties of the second item:</p>
+<p><img class="alignnone size-full wp-image-3793025" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a.png" data-lazy-load alt="One login in object list" width="440" height="248" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a.png 440w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a-300x169.png 300w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/posh1_a-128x72.png 128w" sizes="(max-width: 440px) 100vw, 440px" /></p>
+<p>I don't want to discuss objects here, but comparisons, but I can access them with an index, and then get a property value with a period and the property. As I have a number of items, so I can do something like this code:</p>
+<pre class="prettyprint  lang-powershell">$Logins[1].Name -eq $Logins[2]</pre>
+<p>This returns false, as the name for the login with index 2 is  "DEVFRANKD\frank" and index #1, as shown in the image, is "##MS_PolicyTsqlExecutionLogin##".</p>
+<p>If I change this to -ne, I'll get a TRUE result. Both results are shown in the image here.</p>
+<p><img class="alignnone size-full wp-image-3793026" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-14_53_49-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png" data-lazy-load alt="PoSh property comparison" width="539" height="377" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-14_53_49-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png 539w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-14_53_49-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-300x210.png 300w" sizes="(max-width: 539px) 100vw, 539px" /></p>
+<p>Note I didn't have $Logins[2].Name, but PoSh looks for that property to try and guess what I'm doing here.</p>
+<p>This allows me to perform comparisons of different properties. If I can't compare two things directly, PoSh tells me. If I try to compare the two objects themselves, without any properties, I get a message that things are not iComparable. You don't know to know what that means other than the things are not directly comparable.</p>
+<p><img class="alignnone size-full wp-image-3793027" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-14_57_56-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png" data-lazy-load alt="PoSh gives a not comparable error" width="665" height="139" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-14_57_56-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png 665w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-14_57_56-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-300x63.png 300w" sizes="(max-width: 665px) 100vw, 665px" /></p>
+<p>We can also use the -like operator with wildcards, as we can in T-SQL. The wildcard character in PoSh is the *, which is different from the % in T-SQL. With this, we can do something similar like:</p>
+<pre class="prettyprint  lang-powershell"> "Frank" -Like "Fr*"</pre>
+<p>This returns true, as Fr* is like Frank. The two explicit characters (F and r) match, and the asterisk matches the "ank". However, what about Frank and FRANK.</p>
+<pre class="prettyprint  lang-powershell"> "Frank" -Like "FR*"</pre>
+<p>This returns TRUE. Why? PoSh is fundamentally case insensitive (I learned that on <a href="https://stackoverflow.com/questions/2436195/selecting-strings-and-case-sensitivity/2436218#:~:text=PowerShell%20is%20fundamentally%20case%20insensitive,of%20like%20%2C%20use%20%2Dclike%20.&amp;text=From%20documentation%3A,comparison%20operators%20are%20case%2Dinsensitive.">Stack Overflow</a>). If I want case sensitivity, I can use the -clike comparison, which returns FALSE for that same code above.</p>
+<p>Other than the strange operators, comparisons mostly work as we expect. We get two values and then compare them in some way. We can choose the method, and then get a TRUE/FALSE that can drive our other logic.</p>
+<p>Now, let's see how we can start to use comparison operators to filter values.</p>
+<h2>Where-Object</h2>
+<p>One of the cmdlets I use quite often is <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/where-object?view=powershell-7">Where-Object</a>. This is like a WHERE clause in T-SQL, but one that's written for your objects. This allows you to filter out items from your pipeline or collection. For example, in my object above, I had all logins. If I show the variable, I see a number of logins that scroll off the screen (you can see the background outside the console).</p>
+<p><img class="alignnone size-full wp-image-3793046" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-16_45_45-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png" data-lazy-load alt="list of logins" width="637" height="682" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-16_45_45-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png 637w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-16_45_45-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-280x300.png 280w" sizes="(max-width: 637px) 100vw, 637px" /></p>
+<p>If I want to limit this list to the sa account, I can limit this by pipeing the collection through Where-Object. I'll use this code, which has a comparison from above.</p>
+<pre class="prettyprint  lang-powershell">$Logins | Where-Object {$_.Name -eq 'sa'}</pre>
+<p>This will return this data:</p>
+<pre class="prettyprint  lang-plain">ComputerName : DEVFRANKD
+InstanceName : MSSQLSERVER
+SqlInstance  : DEVFRANKD
+Name         : sa
+LoginType    : SqlLogin
+CreateDate   : 4/8/2003 9:10:35 AM
+LastLogin    : 10/5/2020 1:49:02 PM
+HasAccess    : True
+IsLocked     : False
+IsDisabled   : False</pre>
+<p>If I use a LIKE operator, I could actually get more than one login.</p>
+<p><img class="alignnone size-full wp-image-3793047" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-16_50_40-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png" data-lazy-load alt="List of three logins with the LIKE comparison" width="838" height="636" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-16_50_40-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png 838w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-16_50_40-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-300x228.png 300w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-16_50_40-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-768x583.png 768w" sizes="(max-width: 838px) 100vw, 838px" /></p>
+<p>If you notice here, the Where-Object takes a script block, which is enclosed in the {}. Inside of here, we can perform our comparison. The current object being tested is referred to with the $_ notation. I treat this structure as the object and then include the period and property, as in $_.Name for the name property, or $_.LoginType for the type of login.</p>
+<p>Often when we are looking to limit the results from a large query of data, we can use Where-Object to filter things. By piping out collection through here, we can control what data will be operated on by the rest of our code.</p>
+<p>There are other comparison operators in the <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/where-object?view=powershell-7">documentation</a>, but I typically haven't used them in my work.</p>
+<h3>The Where Method</h3>
+<p>The other option that we have is a Where() method, which is for all object. When we use this method, we have a few parameters that are available. The first is a script block, as in this code:</p>
+<pre class="prettyprint  lang-powershell">(Get-DbaLogin -SqlInstance Aristotle).Where({$_.Name -eq "sa"})</pre>
+<p>I put my object in parenthesis and then call the Where() method on that. The same script block structure is used here. There are other parameters are listed in the Where method section of the <a href="https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_arrays?view=powershell-7">About Arrays docs</a>. We have a second parameter that is the mode of operation. We have these modes:</p>
+<ul>
+<li>Default (0) - Return all items</li>
+<li>First (1) - Return the first item</li>
+<li>Last (2) - Return the last item</li>
+<li>SkipUntil (3) - Skip items until condition is true, the return the remaining items</li>
+<li>Until (4) - Return all items until condition is true</li>
+<li>Split (5) - Return an array of two elements
+<ul>
+<li>The first element contains matching items</li>
+<li>The second element contains the remaining items</li>
+</ul>
+</li>
+</ul>
+<p>The third parameter is a number of items. We can use that to further limit any of these modes. I have 3 SQL Logins on my instance, and if I run this, I skip over the first few Windows Auth logins, and then return 2 with this code.</p>
+<pre class="prettyprint  lang-powershell">(Get-DbaLogin -SqlInstance DevFrankD).Where({$_.LoginType -eq "SqlLogin"}, "SkipUntil", 2)</pre>
+<p>I see the two logins here.</p>
+<p><img class="alignnone size-full wp-image-3793073" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_09_59-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png" data-lazy-load alt="2 logins returned from PoSh code" width="1004" height="569" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_09_59-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png 1004w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_09_59-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-300x170.png 300w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_09_59-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-768x435.png 768w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_09_59-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-128x72.png 128w" sizes="(max-width: 1004px) 100vw, 1004px" /></p>
+<h3>Filters</h3>
+<p>Many cmdlets have some sort of filter property. I know some of the Active Directory cmdlets have a -Filter parameter, where you can include some comparison operation. The dbaTools cmdlets have an -IncludeFilter and an -ExcludeFilter parameter. I can use this to filter things as soon as I run the cmdlet. For example, if I want just the SQL Logins, I can do this:</p>
+<pre class="prettyprint  lang-powershell"> Get-DbaLogin -SqlInstance DevFrankD -IncludeFilter "Frank*"</pre>
+<p>This means that only logins that start with Frank are returned. When I run this, I see this result:</p>
+<p><img class="alignnone size-full wp-image-3793075" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_24_08-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png" data-lazy-load alt="Filtering in the cmdlet" width="836" height="517" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_24_08-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png 836w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_24_08-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-300x186.png 300w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_24_08-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-768x475.png 768w" sizes="(max-width: 836px) 100vw, 836px" /></p>
+<p>Note that the cmdlet determines what is filtered. For this cmdlet, we only can filter on login name. The -ExcludeFilter parameter excludes logins matching the parameter. If I change this, I get all the logins that don't start with Frank.</p>
+<p>For some of the cmdlets that have a -Filter parameter, they may allow a script block expression to be added in quotes. I haven't seen a lot of these, but some cmdlets implement this.</p>
+<h2>Choosing What is Returned</h2>
+<p>So far, each time we have run a cmdlet, we get the complete object, with all the properties. For Get-DbaLogin, the default shows us 10 properties, but there are others. If we run the output through Get-Member, as in this code, we'll see many more properties.</p>
+<p><img class="alignnone size-large wp-image-3793074" src="data:image/gif;base64,R0lGODlhAQABAPAAAPLy8v///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_14_04-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-1024x358.png" data-lazy-load alt="All properties for the object listed." width="1024" height="358" data-srcset="https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_14_04-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-1024x358.png 1024w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_14_04-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-300x105.png 300w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_14_04-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection-768x269.png 768w, https://www.sqlservercentral.com/wp-content/uploads/2020/10/2020-10-05-20_14_04-Win10Dev-on-ARISTOTLE-Virtual-Machine-Connection.png 1080w" sizes="(max-width: 1024px) 100vw, 1024px" /></p>
+<p>While we can filter on any of these, often we might want to show specific properties and not others. One of the easy ways to do this is with the Select-Object. If I use my $Logins variable, this code will filter to one login and then return specific properties.</p>
+<pre class="prettyprint  lang-powershell"> $Logins | Where-Object {$_.Name -eq "sa"} | Select-Object Name, Sid, MustChangePassword</pre>
+<p>The results I see from this are:</p>
+<pre class="prettyprint  lang-plain">Name Sid MustChangePassword
+---- --- ------------------
+sa   {1}              False</pre>
+<p>I can just include a comma separated list of property names with Select-Object and then just have those objects. If I change my filter to include all the SQL Logins, I get these results.</p>
+<pre class="prettyprint  lang-plain">Name                              Sid                     MustChangePassword
+----                              ---                     ------------------
+##MS_PolicyEventProcessingLogin## {240, 187, 115, 148...}              False
+##MS_PolicyTsqlExecutionLogin##   {39, 87, 141, 133...}                False
+FrankAdmin                        {31, 52, 76, 75...}                  False
+FrankDev                          {204, 52, 180, 125...}               False
+sa                                {1}                                  False</pre>
+<p>I'm not sure why the MS_PolicyXX logins are SqlLogins, but they are.</p>
+<h2>Summary</h2>
+<p>This is another short introduction to a few concepts that have helped me build PoSh scripts that are useful and helpful in my job. Knowing how to filter and select certain data, and perform comparisons, will enable you to build flexible scripts to get things done.</p>
+<p>The comparison operators feel strange at first, but you quickly get used to them and the names are easy to guess if you forget them.</p>
+<p>&nbsp;</p>
+                </div>
+
+                                                    
+                                    
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+                
+                                                    
+                                                    
+                                                    
+            </div>
+        </div>
+
+        <div class="grid__col grid__col--span-2-of-12 content-single-sidebar">
+            <div class="sidebar">
+    <aside class="sidebar__widget sidebar__widget--advads_ad_widget-4 sqlse-widget clearfix"><a href="https://www.pass.org/summit/2020/Register-Now?utm_source=Redgate&#038;utm_medium=web&#038;utm_campaign=SQLServerCentral"><img   src='https://www.sqlservercentral.com/wp-content/uploads/2020/10/PASS_20_DisplayBanners_300x250-004.jpg' alt=''  width="100%"  style="max-width:100%;"/></a></aside></div>            <!-- template-parts/content-single-sidebar-meta.php -->
+
+    <div class="spaced-bottom">
+        
+        <div data-target="ssc-visitor-counter">
+            <!-- Target for ssc-visitor-counter.js, which dynamically injects
+            right here visitor stats for the current post or page. -->
+        </div>
+    </div>
+
+    <div class="spaced-bottom">
+        <h2 class="gamma">Rate</h2>
+        
+<div class="ssc-star-rating ssc-star-rating--interactive" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" data-target="ssc-star-rating" data-post="3792395">
+
+            <meta itemprop="ratingValue" content="5" />
+        <meta itemprop="ratingCount" content="3" />
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+                    <div class="ssc-star-rating__vote" hidden style="display: none;">
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                            </div>
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">5</span>
+            (<span data-target="ssc-star-rating-count">3</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+    </div>
+
+    <div class="spaced-bottom">
+        
+<!-- template-parts/ssc-social-icons.php -->
+<h2 class="gamma">Share</h2>
+<ul class="sharing list--horizontal">
+            <li><a class="sharing__link sharing__link--email" title="Email" target="" href="mailto:?subject=Article on https://www.sqlservercentral.com: PowerShell Day by Day: Filtering Objects&body=I found this great article on https://www.sqlservercentral.com.%0D%0A%0D%0A
+It's called PowerShell Day by Day: Filtering Objects.%0D%0A%0D%0A
+You can find it here http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects."></a></li>
+            <li><a class="sharing__link sharing__link--facebook" title="Share on Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects&quote=PowerShell Day by Day: Filtering Objects"></a></li>
+            <li><a class="sharing__link sharing__link--twitter" title="Tweet" target="_blank" href="https://twitter.com/intent/tweet?source=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects&text=PowerShell Day by Day: Filtering Objects:%20http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects"></a></li>
+            <li><a class="sharing__link sharing__link--linked-in" title="Share on LinkedIn" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects&title=PowerShell Day by Day: Filtering Objects&summary=In my last article, The Basics of PowerShell Day By Day, I covered some basics of getting&source=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects"></a></li>
+            <li><a class="sharing__link sharing__link--print" title="Print" target="" href="javascript:window.print && window.print();"></a></li>
+    </ul>
+<!-- / template-parts/ssc-social-icons.php -->
+    </div>
+
+
+
+        <div class="post__tags spaced-bottom">
+            <h2 class="gamma">Categories</h2>
+            <ul class="list--bare">
+                                                        <li><a href="https://www.sqlservercentral.com/categories/powershell" class="label background-color--blue--1 color--blue--8">PowerShell</a></li>
+                            </ul>
+        </div>
+    
+
+<meta itemprop="keywords" content="PowerShell">
+
+<!-- / template-parts/content-single-sidebar-meta.php -->
+        </div>
+    </div>
+</div>
+
+<!-- template-parts/content-single-meta.php -->
+<div class="band content-single-meta">
+    <div class="band__inner-container padded--tight--small padded-top--none grid">
+        <div class="grid__row spaced-bottom">
+            <div class="grid__col grid__col--span-10-of-12 grid__col--push-2-of-12">
+                <div class="padded-left padded-h--none--small clearfix">
+
+                                            <p><a href="https://www.sqlservercentral.com/forums/topic/powershell-day-by-day-filtering-objects"><strong>Join the discussion and add your comment</strong></a></p>                    
+                                            
+        <div data-target="ssc-related-forum-topics-top-comments">
+            <!-- Target for ssc-related-forum-topics/top-comments.js. -->
+        </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="grid__row hide-on-small">
+            <div class="grid__col grid__col--span-10-of-12 grid__col--push-2-of-12">
+                <div class="padded-left padded-h--none--small clearfix">
+
+                                            <div class="grid__col grid__col--span-3-of-12">
+                            
+<!-- template-parts/ssc-social-icons.php -->
+<h2 class="gamma">Share</h2>
+<ul class="sharing list--horizontal">
+            <li><a class="sharing__link sharing__link--email" title="Email" target="" href="mailto:?subject=Article on https://www.sqlservercentral.com: PowerShell Day by Day: Filtering Objects&body=I found this great article on https://www.sqlservercentral.com.%0D%0A%0D%0A
+It's called PowerShell Day by Day: Filtering Objects.%0D%0A%0D%0A
+You can find it here http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects."></a></li>
+            <li><a class="sharing__link sharing__link--facebook" title="Share on Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects&quote=PowerShell Day by Day: Filtering Objects"></a></li>
+            <li><a class="sharing__link sharing__link--twitter" title="Tweet" target="_blank" href="https://twitter.com/intent/tweet?source=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects&text=PowerShell Day by Day: Filtering Objects:%20http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects"></a></li>
+            <li><a class="sharing__link sharing__link--linked-in" title="Share on LinkedIn" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects&title=PowerShell Day by Day: Filtering Objects&summary=In my last article, The Basics of PowerShell Day By Day, I covered some basics of getting&source=http://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects"></a></li>
+            <li><a class="sharing__link sharing__link--print" title="Print" target="" href="javascript:window.print && window.print();"></a></li>
+    </ul>
+<!-- / template-parts/ssc-social-icons.php -->
+                        </div>
+                    
+                                            <div class="grid__col grid__col--span-3-of-12">
+                            <h2 class="gamma">Rate</h2>
+                            
+<div class="ssc-star-rating ssc-star-rating--interactive" data-target="ssc-star-rating" data-post="3792395">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+                    <div class="ssc-star-rating__vote" hidden style="display: none;">
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                                                        <span class="ssc-star-rating__star ssc-star-rating__star--vote">★</span>
+                            </div>
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">5</span>
+            (<span data-target="ssc-star-rating-count">3</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/powershell-day-by-day-filtering-objects">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+                        </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / template-parts/content-single-meta.php -->
+
+
+<!-- template-parts/ssc-related-content-list.php -->
+<div class="band border-top border-color--grey--3 related-content">
+    <div class="band__inner-container grid">
+        <div class="grid__row">
+            <div class="grid__col grid__col--span-10-of-12 grid__col--push-2-of-12">
+                <h1 class="text--normal padded-h padded-h--none--small spaced-bottom">Related content</h1>
+            </div>
+        </div>
+
+        
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/articles/calling-procs-from-powershell-with-parameters" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/powershell.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/articles/calling-procs-from-powershell-with-parameters">Calling Procs from PowerShell with Parameters</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/frankdolan77" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">FrankDolan77</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="https://www.sqlservercentral.com">SQLServerCentral</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/powershell">PowerShell</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>Building on his last article, Frank shows how to add parameters to your stored procedure calls from PoSh.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">5</span>
+            (<span data-target="ssc-star-rating-count">5</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/calling-procs-from-powershell-with-parameters">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none"><span itemprop="dateCreated">2020-08-20</span></p>
+                                    <p class="spaced-bottom--none">2,528 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/calling-procs-from-powershell-with-parameters">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/articles/the-basics-of-powershell-day-by-day" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/powershell.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/articles/the-basics-of-powershell-day-by-day">The Basics of PowerShell Day By Day</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/frankdolan77" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">FrankDolan77</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="https://www.sqlservercentral.com">SQLServerCentral</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/powershell">PowerShell</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>A basic introduction to PowerShell for those DBAs familiar with T-SQL.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">5</span>
+            (<span data-target="ssc-star-rating-count">5</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/the-basics-of-powershell-day-by-day">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none"><span itemprop="dateCreated">2020-08-13</span></p>
+                                    <p class="spaced-bottom--none">4,956 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/the-basics-of-powershell-day-by-day">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/articles/calling-a-stored-procedure-from-powershell" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/powershell.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/articles/calling-a-stored-procedure-from-powershell">Calling a Stored Procedure from PowerShell</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/frankdolan77" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">FrankDolan77</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="https://www.sqlservercentral.com">SQLServerCentral</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/powershell">PowerShell</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>This article will explain how to use PowerShell to call a stored procedure and export results to the screen or a file.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">4.5</span>
+            (<span data-target="ssc-star-rating-count">2</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/calling-a-stored-procedure-from-powershell">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none"><span itemprop="dateCreated">2020-08-04</span></p>
+                                    <p class="spaced-bottom--none">4,671 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/calling-a-stored-procedure-from-powershell">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/articles/an-introduction-to-powershell-for-a-dba" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/powershell.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/articles/an-introduction-to-powershell-for-a-dba">An Introduction to PowerShell for a DBA</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/Alex-Chamchourine" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">Alex Chamchourine</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="http://www.sqlservercentral.com">SQLServerCentral.com</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/powershell">PowerShell</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>An introduction to PowerShell that covers basics alone with some more advanced features. It will walk you through from the very beginning to the writing of a few useful scripts.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full ">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">4.57</span>
+            (<span data-target="ssc-star-rating-count">14</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/an-introduction-to-powershell-for-a-dba">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none">2020-05-01 <span class="date--first-published">(first published: <span itemprop="datePublished">2017-12-21</span>)</span></p>
+                                    <p class="spaced-bottom--none">6,709 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/an-introduction-to-powershell-for-a-dba">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/ssc-related-content-list-item.php -->
+
+<!-- template-parts/content-loop.php -->
+<article class="grid__row spaced-bottom post-listing__post">
+
+        <div class="grid__col grid__col--span-2-of-12">
+        
+    <div class="thumbnail-container">
+        <a href="https://www.sqlservercentral.com/articles/backing-up-sql-server-databases-is-easier-in-powershell-than-t-sql" class="link-image flex flex-align--center flex-justify--center"><img src="https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-post-thumbnails/images/powershell.svg" alt="" /></a>
+    </div>
+    </div>
+
+    
+    <div class="grid__col grid__col--span-8-of-12">
+        <div class="padded-h padded-h--none--small">
+            <h1 class="beta">
+                                    <a href="https://www.sqlservercentral.com/articles/backing-up-sql-server-databases-is-easier-in-powershell-than-t-sql">Backing Up SQL Server Databases is Easier in PowerShell than T-SQL</a>
+                            </h1>
+
+                            <div class="post-listing__taxonomies">
+                    <ul class="post-listing__author list--horizontal list--bare display--inline">
+                        <li>by <a href="https://www.sqlservercentral.com/author/aaron-nelson-sqlvariant" itemprop="url"><span itemprop="author" itemtype="http://schema.org/Person"><span itemprop="name">Aaron Nelson</span></span></a></li>
+                    </ul>
+
+                                            <ul class="post-listing__sources list--horizontal list--bare display--inline">
+                            <li><a href="http://www.sqlservercentral.com">SQLServerCentral.com</a></li>
+                        </ul>
+                    
+                                            <ul class="post-listing__categories list--horizontal list--bare display--inline">
+                                                            <li><a href="https://www.sqlservercentral.com/categories/powershell">PowerShell</a></li>
+                                                    </ul>
+                    
+                                    </div>
+            
+            <p>Learn how easy the new SQLServer module makes backups of SQL Server databases.</p>
+
+                            
+<ul class="ssc-books-links">
+    
+    
+    
+    
+    
+    
+    
+    
+    </ul>
+
+            
+        </div>
+    </div>
+
+                        <div class="grid__col grid__col--span-2-of-12">
+                
+<div class="ssc-star-rating">
+
+    
+    <div class="ssc-star-rating__inner">
+
+        
+        <div class="ssc-star-rating__average">
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                                            <span class="ssc-star-rating__star ssc-star-rating__star--full  ssc-star-rating__star--active">★</span>
+                <span class="ssc-star-rating__star ssc-star-rating__star--half  ssc-star-rating__star--active">★</span>
+                    </div>
+
+        
+            </div>
+
+            <p class="ssc-star-rating__stats">
+            <span data-target="ssc-star-rating-score">4.92</span>
+            (<span data-target="ssc-star-rating-count">36</span>)
+        </p>
+    
+        <p class="ssc-star-rating__login-notice">
+        <a href="/wp-login.php?redirect_to=https://www.sqlservercentral.com/articles/backing-up-sql-server-databases-is-easier-in-powershell-than-t-sql">Log in</a> or <a href="/wp-login.php?action=register">register</a> to rate
+    </p>
+</div>
+
+                <p class="spaced-bottom--none"><span itemprop="dateCreated">2017-01-12</span></p>
+                                    <p class="spaced-bottom--none">17,598 reads</p>
+                                <ul class="list--bare list--horizontal spaced-bottom--none">
+                    <li class="spaced-right--tight"><a href="https://www.sqlservercentral.com/forums/topic/backing-up-sql-server-databases-is-easier-in-powershell-than-t-sql">Discuss</a></li>
+                </ul>
+            </div>
+            
+</article>
+
+<!-- / template-parts/ssc-related-content-list-item.php -->
+    </div>
+</div>
+<!-- / template-parts/ssc-related-content-list.php -->
+
+<!-- FOOTER -->
+<footer>
+    <div class="band background-color--blue--9 color--white footer__graphs">
+        <div class="band__inner-container band__inner-container--tight grid">
+            <a href="https://monitor.red-gate.com/overviews/SQLMON-EC2-BM2/cluster/sscdbcluster.ssc.local/sql/ssc-db-n1%5C(local)" target="_blank" rel="noopener" class="flex" title="Take a peek into our servers">
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-12-of-12--medium flex flex-align--center">
+                    <img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc-logo.svg" alt="" class="logo">
+                    <img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/header/ssc.svg" alt="" class="logo">
+                </div>
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">CPU</p>
+                        <script>var cpuChartData = {"labels":[1602081606576,1602082102011,1602082597332,1602083092212,1602083602821,1602084099116,1602084594160,1602085089240,1602085599290,1602086094962,1602086590376,1602087085361,1602087595767,1602088090892,1602088586802,1602089096934,1602089592077,1602090087244,1602090582402,1602091092745,1602091588045,1602092083272,1602092579663,1602093090772,1602093586132,1602094081634,1602094577148,1602095087303,1602095583151,1602096078231,1602096588250,1602097084127,1602097579243,1602098075555,1602098570687,1602099081748,1602099576894,1602100073459,1602100569652,1602101080384,1602101575570,1602102071570,1602102568337,1602103078196,1602103573583,1602104069679,1602104564528,1602105074551,1602105569956,1602106064839,1602106574931,1602107070928,1602107566587,1602108062833,1602108572888,1602109067941,1602109563743,1602110058993,1602110570018,1602111065603,1602111560756,1602112057094,1602112567747,1602113063565,1602113558770,1602114053909,1602114552285,1602115063970,1602115559240,1602116054049,1602116549570,1602117060121,1602117556122,1602118051887,1602118547056,1602119057166,1602119552359,1602120047447,1602120557491,1602121053057,1602121548492,1602122043551,1602122553709,1602123048800,1602123543956,1602124054143,1602124552782,1602125048125,1602125543234,1602126038854,1602126548934,1602127044085,1602127539356,1602128035355,1602128545398,1602129040491,1602129537582,1602130033817,1602130543835,1602131039553,1602131535078,1602132030834,1602132540939,1602133035934,1602133531537,1602134041438,1602134536473,1602135033459,1602135533932,1602136029133,1602136539119,1602137034806,1602137530105,1602138025212,1602138535700,1602139030788,1602139525968,1602140022460,1602140532487,1602141027914,1602141522803,1602142018451,1602142529859,1602143024908,1602143520053,1602144030277,1602144526447,1602145022671,1602145517860,1602146012946,1602146524198,1602147019882,1602147515180,1602148010991,1602148521321,1602149016460,1602149511662,1602150022622,1602150517925,1602151013266,1602151510471,1602152007311,1602152518783,1602153013725,1602153508934,1602154004058,1602154514228,1602155009882,1602155505085,1602156000686,1602156512362,1602157008464,1602157503479,1602157999485,1602158509657,1602159005140,1602159500988,1602159996189,1602160507354,1602161003042,1602161498372,1602161993436,1602162504935,1602163002363,1602163497990,1602163993217,1602164504734,1602164999912,1602165495318,1602165991816,1602166502435,1602166997639,1602167493630,1602167990168],"dataSets":[{"label":"","data":[10.9007948637042,14.461713789743182,13.849914258223992,15.247943990208954,13.102465909116109,9.106139355726745,10.082757904272302,10.878522404562226,12.92037680390217,8.3318916229942,12.505329557612447,12.359495381903423,10.573311857744011,11.18760957202176,11.430597742493305,11.552228523420984,11.071627318686035,11.35939851920177,13.594940728390212,9.288714938123006,12.752277351861721,10.60277918109137,11.37980119151546,9.267157052425548,8.242107198565831,11.076992940123601,13.751104964897214,15.896680996021695,10.980633753218429,8.588415307048725,9.797421390682073,11.6543052073662,12.648174090219207,15.735569363083362,7.028204010382698,11.0680271913452,11.495584636008365,7.621896475351013,7.100946546422882,9.052954861837716,8.896196033505225,6.6835445596365135,12.542032301730291,18.577052846135143,10.474761297205767,12.277517354005694,15.86182702784846,8.889780526102188,12.199205621645692,6.447237016318241,8.803556185447132,13.639267528063462,12.068453616218983,6.117417135024088,11.449039371267624,12.38899275900648,7.338959567604046,9.093029159943473,12.666025371684261,13.259660332002662,8.049121715707184,14.02537792596432,14.747135017544638,8.914789623612496,12.78156536703157,6.891219583743541,7.712154176571537,8.862409839994543,8.438824612741685,14.273969558128696,9.626469889488154,7.776899569946605,9.24386530194324,11.398099513091191,7.3376906266411455,12.418818428194873,6.8356395145912225,6.135672112444987,6.82538751089313,11.742403092765503,6.636765177062435,8.109834920782385,11.619795866983527,9.137762887206417,13.528720512901327,12.366779710236617,5.909450018261774,10.966200372128721,7.561459879501024,11.708436001962886,8.485953434392059,8.512242347301555,9.406139281617195,14.80559716760058,9.758665081311188,8.870261021901376,9.94536335934809,9.880656696286705,7.152396328186445,7.619552303171689,9.375703966970663,10.210893274059686,9.77049592823647,5.535495939378575,18.448541310222964,22.530417824822173,18.785354457959357,22.24386454360291,21.24005192215015,10.411262103950747,7.278080338866243,7.1078023144454505,16.511491265433893,12.726480103917979,13.124312308838206,11.451566569772195,11.047915889343141,13.807404997613965,7.8925100101725265,12.892922188684047,9.938303932562937,6.637856008816402,11.740709209020944,11.909733301287115,14.670586831314598,5.564719504526539,11.384095871615635,13.284307322774211,13.46707439902543,8.688508384647394,7.4422931630828995,9.660340398443177,7.190273135847836,8.66831262619282,9.476116056477697,10.51786964202276,11.22173958902997,11.544612985026706,9.640165627371939,7.540568441058884,10.124959200198798,9.797474050112259,8.843960939606607,8.725372622167797,12.083352678098528,11.676775972244407,7.944658132321909,7.568510758484688,10.422256353494133,9.23200841239022,10.57912304451572,10.78406991737198,10.484626250056216,9.609962035214952,8.45417822200404,9.11121840840694,11.568332344133065,11.30812901386535,10.814002247942364,12.483434149238736,6.842426125166027,12.701157738928226,9.059624975672605,13.055816106588441,11.42848770302938,12.344399119241048,10.797765705585713,9.375185367794973,8.53741301389027,12.13853532218355,8.657549655174341,9.866113674408576,14.49197311255733,12.487238483774124],"colour":"42, 94, 157"}],"chart":"cpu"};</script><div
+        id="chart--cpu"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="cpuChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">Memory</p>
+                        <script>var memoryChartData = {"labels":[1602081096104,1602081606567,1602082102001,1602082597315,1602083092203,1602083602811,1602084099107,1602084594139,1602085089230,1602085599280,1602086094945,1602086590355,1602087085352,1602087595758,1602088090881,1602088586790,1602089096925,1602089592068,1602090087236,1602090582394,1602091092737,1602091588032,1602092083264,1602092579654,1602093090763,1602093586123,1602094081612,1602094577139,1602095087287,1602095583139,1602096078221,1602096588241,1602097084118,1602097579233,1602098075544,1602098570676,1602099081738,1602099576884,1602100073450,1602100569643,1602101080374,1602101575560,1602102071561,1602102568320,1602103078188,1602103573574,1602104069662,1602104564519,1602105074541,1602105569947,1602106064822,1602106574922,1602107070919,1602107566576,1602108062822,1602108572878,1602109067932,1602109563734,1602110058984,1602110570009,1602111065594,1602111560747,1602112057077,1602112567738,1602113063556,1602113558760,1602114053899,1602114552276,1602115063961,1602115559224,1602116054040,1602116549527,1602117060111,1602117556113,1602118051877,1602118547047,1602119057157,1602119552350,1602120047437,1602120557482,1602121053047,1602121548482,1602122043542,1602122553700,1602123048790,1602123543947,1602124054134,1602124552772,1602125048115,1602125543225,1602126038843,1602126548925,1602127044072,1602127539346,1602128035346,1602128545389,1602129040481,1602129537574,1602130033808,1602130543825,1602131039539,1602131535067,1602132030823,1602132540875,1602133035918,1602133531521,1602134041429,1602134536463,1602135033413,1602135533924,1602136029073,1602136539110,1602137034797,1602137530092,1602138025200,1602138535677,1602139030777,1602139525956,1602140022451,1602140532478,1602141027872,1602141522795,1602142018442,1602142529851,1602143024897,1602143520044,1602144030268,1602144526438,1602145022659,1602145517848,1602146012938,1602146524188,1602147019873,1602147515171,1602148010982,1602148521310,1602149016450,1602149511652,1602150022597,1602150517916,1602151013257,1602151510462,1602152007302,1602152518741,1602153013715,1602153508913,1602154004049,1602154514218,1602155009873,1602155505076,1602156000677,1602156512354,1602157008456,1602157503433,1602157999476,1602158509647,1602159005132,1602159500978,1602159996180,1602160507329,1602161003032,1602161498364,1602161993427,1602162504926,1602163002354,1602163497969,1602163993177,1602164504723,1602164999902,1602165495310,1602165991807,1602166502425,1602166997630,1602167493620,1602167990159],"dataSets":[{"label":"","data":[53631352832,53626044416,53634236416,53632098304,53627027456,53617352704,53617459200,53622415360,53615017984,53637177344,53635137536,53629870080,53623627776,53623160832,53616705536,53614616576,53625765888,53655052288,53639004160,53618532352,53616615424,53661925376,53653348352,53659377664,53662326784,53651013632,53644025856,53636276224,53632278528,53647605760,53644410880,53660295168,53646917632,53630091264,53624709120,53637701632,53651628032,53658607616,53653495808,53657665536,53647327232,53648883712,53652348928,53656633344,53651742720,53645869056,53648048128,53634138112,53635473408,53636849664,53646696448,53640388608,53640151040,53651456000,53651267584,53631885312,53624152064,53645688832,53639839744,53634015232,53628698624,53621809152,53611159552,53613215744,53637275648,53640028160,53621243904,53650546688,53654093824,53653266432,53646557184,53635686400,53646385152,53639544832,53634932736,53629067264,53625094144,53630197760,53638930432,53649219584,53634760704,53643403264,53644312576,53639692288,53629132800,53618614272,53619499008,53619261440,53624012800,53638455296,53629714432,53617090560,53638217728,53635391488,53630115840,53624668160,53641773056,53647220736,53644378112,53621202944,53625946112,53634482176,53628059648,53628411904,53644722176,53686804480,53686771712,53684314112,53686935552,53686689792,53663555584,53662662656,53661040640,53658148864,53661294592,53663440896,53659754496,53671665664,53686026240,53683765248,53670412288,53676204032,53683822592,53676384256,53667209216,53662187520,53666340864,53661171712,53662162944,53656846336,53653069824,53651898368,53658173440,53659082752,53658624000,53650161664,53647048704,53649678336,53653037056,53681651712,53672108032,53663776768,53659754496,53655592960,53664604160,53654601728,53660999680,53659451392,53658124288,53655666688,53648367616,53652602880,53648695296,53642354688,53645213696,53644992512,53644959744,53641560064,53641945088,53643198464,53644787712,53645139968,53646835712,53646606336,53634342912,53634490368,53639331840,53637218304,53635874816,53643149312,53641093120,53645197312,53642092544,53643649024,53634981888],"colour":"42, 94, 157"}],"chart":"memory"};</script><div
+        id="chart--memory"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="memoryChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">Disk I/O</p>
+                        <script>var diskChartData = {"labels":[1602081606230,1602082086792,1602082596806,1602083076852,1602083587726,1602084097945,1602084578006,1602085088068,1602085598224,1602086078316,1602086589581,1602087099596,1602087579610,1602088090016,1602088570921,1602089080936,1602089590966,1602090070981,1602090581574,1602091091589,1602091572385,1602092082431,1602092563539,1602093073554,1602093584321,1602094064365,1602094574598,1602095084629,1602095564643,1602096074698,1602096584720,1602097065750,1602097575781,1602098085843,1602098565873,1602099075904,1602099555934,1602100066074,1602100576120,1602101056259,1602101566290,1602102076399,1602102556428,1602103066897,1602103576943,1602104057176,1602104567316,1602105077331,1602105557361,1602106067503,1602106547643,1602107057827,1602107567843,1602108047874,1602108557925,1602109068856,1602109549010,1602110059057,1602110569150,1602111049214,1602111559633,1602112039647,1602112549662,1602113060755,1602113542019,1602114052066,1602114562565,1602115043549,1602115553579,1602116064219,1602116544265,1602117054357,1602117534371,1602118044464,1602118554667,1602119034682,1602119545025,1602120055039,1602120536069,1602121046101,1602121556350,1602122036693,1602122547724,1602123027785,1602123537800,1602124047830,1602124529157,1602125039563,1602125550031,1602126030108,1602126540123,1602127050154,1602127530234,1602128040261,1602128520306,1602129030352,1602129540641,1602130020742,1602130531459,1602131041490,1602131521848,1602132032066,1602132542191,1602133022205,1602133532532,1602134013562,1602134523577,1602135033632,1602135513638,1602136023700,1602136533840,1602137013885,1602137523978,1602138034039,1602138514085,1602139024100,1602139534397,1602140014427,1602140524551,1602141004565,1602141514658,1602142024688,1602142504844,1602143014859,1602143526014,1602144006935,1602144516951,1602145027122,1602145507136,1602146017151,1602146527197,1602147007211,1602147517258,1602147997287,1602148507365,1602149017380,1602149497424,1602150007517,1602150517940,1602150998173,1602151509188,1602152019234,1602152499451,1602153010497,1602153490589,1602154000604,1602154510619,1602154991962,1602155502243,1602156012289,1602156492507,1602157003011,1602157513068,1602157993081,1602158503470,1602158983532,1602159494047,1602160004296,1602160484356,1602160994526,1602161505290,1602161985897,1602162497052,1602162977112,1602163487251,1602163997390,1602164477549,1602164987631,1602165497770,1602165977815,1602166488361,1602166998375,1602167478560,1602167989154],"dataSets":[{"label":"","data":[3857281.2946145795,3788820.9261906343,3732181.5691315397,4517907.765473817,4609631.464094743,6846789.724726377,4295779.432066344,4492843.251280298,3908323.968445733,3632696.2515155845,3650526.3797612754,4546046.727052024,4346239.928053436,4418975.921703653,3546558.107296238,3437137.696811085,6137812.990351518,3712511.289517908,4301032.473487762,5053896.45337032,3954274.4989027525,4344987.8604289275,9705018.895824801,6259548.678686427,3125775.188384835,3805204.148014802,4059119.7724340586,5805532.1143045565,3547908.8589890744,3900826.214823232,3912210.6048458717,3349683.009937292,2621353.818430672,5966066.390508621,3423315.1639847592,5825284.323561108,2455106.8279752834,2038107.789983132,2457087.3715120135,5475589.561192978,2118394.032278085,2565038.4680250213,2335829.4009567797,3824550.91291077,2942218.0127146943,4374084.242620275,4066152.9734779117,3612927.3950150106,3415283.285891032,3157080.4294945993,2950801.6188559714,5702204.744162938,3107911.4862327296,2694910.285401418,3477710.2227308224,6127184.703904511,3030286.503930479,3380086.112023575,5112936.519583774,4593173.226284022,4142364.8564866763,3293962.27528324,9629350.911280544,3356768.1706143823,3468129.0735230423,2842287.976621759,2449717.723096745,2028505.812437716,2825598.9948993884,3416969.8313187687,3376841.405639802,2327117.5564646097,5223779.038716944,3074861.6273538307,2408970.2483594953,3541371.0256828675,2765838.1880925377,2152339.2120211506,2371801.665421127,3053119.8546280335,2314759.9799627042,2407734.4495631587,3115609.2320448924,3541710.843646366,5416357.855191898,4796812.2578249145,2160981.3383268192,1875045.8505166944,2286027.830541676,3000157.6760691972,2734574.7851448217,2553964.442994129,1817426.316955535,5267832.385619681,5906552.628238402,4468147.098411389,2060128.8278708751,2717029.280873605,3045533.6224708213,2534501.2963448637,3236334.8717580703,7142835.562168453,1931859.7695764208,2110636.8003843194,41374035.62267417,83158142.75907637,92398270.34075534,67863388.06178685,16852865.245786995,5128521.258316227,3939316.5064271744,1773677.911198278,26297810.088825032,40076391.53048991,38056514.53055911,51385802.34653466,39884304.84605924,32180996.96992311,30153487.48611247,36753303.647848845,3324769.9224826465,3089925.747005222,3308973.617628526,3514982.2024939945,6007513.022815997,4815164.444144645,8198713.889857427,6570358.729462515,4862363.789145701,9123592.945323098,4339350.086125934,3980461.640977096,3811307.9579508803,3760680.766281833,3919254.797938863,3762935.0353031107,4536263.064223336,3682354.8035868052,7375742.359447604,5938042.11495014,3454937.021532074,2931936.1580227236,3419771.5326052993,3587457.8791133165,6068170.164040572,3635320.960451348,8951377.718733333,4057471.057112176,3531374.845357794,3617002.56482069,4119687.505820738,4055374.4878408937,1978739.8861822486,1998984.0831669993,4907110.948574699,4898333.720767066,5955839.797445757,2393978.575194442,2268823.5973699046,4574026.780191364,1965118.3364102046,2170568.338763761,2301458.8280931604,2512264.570266882,1997780.5961218101,7209684.243500362,2015186.660317396,2146516.4544551764,2139841.276943503,1965482.4393275217,2930123.8190583466,8523349.958634505,3282432.0525420466,3118394.5987383993],"colour":"42, 94, 157"}],"chart":"disk"};</script><div
+        id="chart--disk"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="diskChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-3-of-12--medium">
+                    <div class="padded-h--tight">
+                        <p class="zeta color--white spaced-bottom--none">Waits</p>
+                        <script>var waitsChartData = {"labels":[1602081525127,1602082005207,1602082486770,1602083086250,1602083566280,1602084046330,1602084526300,1602085006767,1602085486297,1602086086857,1602086567920,1602087046390,1602087526873,1602088006797,1602088486860,1602089086777,1602089566933,1602090046903,1602090527437,1602091006903,1602091487047,1602092087027,1602092567043,1602093047120,1602093527513,1602094007120,1602094487060,1602095087260,1602095568290,1602096047510,1602096527713,1602097007683,1602097487560,1602097968310,1602098568040,1602099048057,1602099528137,1602100008760,1602100488247,1602100968293,1602101568290,1602102049087,1602102529637,1602103009900,1602103489120,1602103971667,1602104570820,1602105050260,1602105531180,1602106011197,1602106491180,1602106971480,1602107571303,1602108051350,1602108531837,1602109013413,1602109491603,1602109971743,1602110452463,1602111051803,1602111531850,1602112011867,1602112491960,1602112975243,1602113451837,1602114051850,1602114531990,1602115012447,1602115491947,1602115974260,1602116452027,1602117051990,1602117532397,1602118012067,1602118492100,1602118974400,1602119451993,1602120052100,1602120532147,1602121012117,1602121492100,1602121972867,1602122452477,1602123052537,1602123532600,1602124012570,1602124492647,1602124972960,1602125452520,1602125932647,1602126532567,1602127012567,1602127492583,1602127976910,1602128454037,1602128932647,1602129532720,1602130012787,1602130492660,1602130972863,1602131453037,1602131933037,1602132532940,1602133012970,1602133493020,1602133973113,1602134453113,1602134933677,1602135427520,1602136027483,1602136507517,1602136987487,1602137467720,1602137947847,1602138427660,1602139027687,1602139508420,1602139989330,1602140467860,1602140948703,1602141429783,1602142027673,1602142507857,1602142988310,1602143467720,1602143947813,1602144427783,1602145027983,1602145507983,1602145988153,1602146467963,1602146948433,1602147428013,1602147908200,1602148509027,1602148988150,1602149468153,1602149948090,1602150428200,1602150908700,1602151509150,1602151988200,1602152468260,1602152948247,1602153428967,1602153909043,1602154509010,1602154989230,1602155469573,1602155949840,1602156429933,1602156910247,1602157510040,1602157990057,1602158470103,1602158950073,1602159430167,1602159910150,1602160390387,1602160990240,1602161470163,1602161950240,1602162430273,1602162910900,1602163391087,1602163991210,1602164471037,1602164951100,1602165431290,1602165911570,1602166391180,1602166991193,1602167471193,1602167951240],"dataSets":[{"label":"","data":[55.626411917206426,58.86310614897518,123.89656182057176,124.38113031293788,70.84140574547425,62.418498073117384,57.88486780423776,61.86481069459506,96.63837507559487,33.929998667909956,98.85191752431595,72.74646268313582,96.38842581319216,75.40360557088206,229.08243293067787,55.77604902011445,165.61492514932647,88.83888576369355,226.12135665738532,38.65133294123045,91.01019694091772,83.52778425947528,65.9540515316156,49.7836805345809,42.23000751468069,87.14009595356198,78.11809809559527,178.01899366877703,115.37118267051954,49.27590668169108,74.89540881668795,167.33129153905452,74.97129472760727,103.91471658866355,48.21669751388125,69.76002933229447,147.4733377770372,37.57830981871446,11.73754450068511,29.480508117972025,25.42846047563571,17.67481910244864,160.22474248257203,323.6414214711522,44.57869037185426,70.99412077994475,127.85882737798191,37.05990322042383,60.92905264908925,22.640864802704904,23.446663736007313,81.75723506141995,93.17748735877085,23.808085458298873,92.22726109135104,79.57414821336612,35.452435224492355,50.60399050277003,126.59760359460807,117.82627556979344,58.17555364370572,113.95429745196525,155.29282868110974,95.57133191111625,148.83108054234842,42.454080161596494,40.00499854209189,44.69910938960198,25.115745568300312,130.9046200289024,69.68668828110772,36.10889338175854,25.39929684621581,180.93272458148311,17.680034497628288,47.26933443914576,29.42463562070633,13.349286043988824,23.099821475813823,92.04325270329396,43.32236766718821,16.138794884008263,58.543399845707974,51.77815551778156,124.05663423342352,109.44017334416733,15.757888838665465,64.63493596883698,29.49995829510385,86.84993762067118,35.26303507134285,19.070833333333333,59.045948468384395,240.1559277099976,67.24205505033251,52.470696391634114,64.82044684563378,37.24896733164329,27.740673053078627,39.72486635860251,49.89649585358641,78.46666666666665,45.91408944446019,19.698768826948317,104.34121445682742,91.13234310852273,160.14375,139.09489682955862,247.6880304064247,53.84665387698909,29.10210526754355,29.66852094922599,321.5584934812893,202.92964153234456,132.76839101900114,158.09121922846802,333.25983446112497,265.59231457029375,52.83263327273107,130.71626289662115,150.71090047393363,32.67657930388533,43.643686586808386,52.05920246101074,144.02286143384575,27.30512629844634,90.05562847677977,149.02032655781403,115.32291666666667,49.53662244621697,74.97134282320084,64.54721418610943,27.063263689061266,62.344461636820654,60.95431796507148,73.48634901684953,75.06828082324485,60.130808835326306,88.81089750265565,32.795005202913636,65.47589308018986,58.44901367289427,26.859142607174103,64.07465202182559,101.2231652521218,100.48200701555587,62.9884643655401,30.70884178085044,109.35935362855292,71.0688013126032,106.91678487293086,151.72782804582005,136.04693619298658,68.36841195207671,60.08382530007541,31.506135800154176,138.67492616029364,134.00474600142084,73.89059984965758,278.33652578215,43.22776778774928,101.15460644854888,77.39467911581079,102.09580402266205,109.91342955973401,162.23840779306911,80.89790695396466,91.04221737563613,21.901747225056745,74.71891396685268,75.9054231563145,61.61866492892654,160.59166666666667,141.97776467720865],"colour":"42, 94, 157"}],"chart":"waits"};</script><div
+        id="chart--waits"
+        height="66"
+        class="js-chart"
+        data-chart-type="line"
+        data-chart-source="waitsChartData"
+        data-chart-colour-opacity="1"
+        data-chart-vertical-gridlines="false"
+        data-chart-horizontal-gridlines="false"
+        data-chart-legend="false"
+        data-chart-horizontal-axis="false"
+        data-chart-vertical-axis="false"
+        data-chart-animation="false"
+        data-chart-point-radius="0"
+        data-chart-tooltips="false"
+    ></div>                    </div>
+                </div>
+
+                <div class="grid__col grid__col--span-2-of-12 grid__col--span-12-of-12--medium text--right flex flex-align--center flex-justify--end">Take a peek into our servers</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="band background-color--blue--8 color--white footer__menu">
+        <div class="band__inner-container padded-v--loose padded-h--tight grid flex">
+            <div class="grid__col grid__col--span-9-of-12 grid__col--span-12-of-12--medium flex flex-align--center">
+                <ul id="menu-footer-menu" class="list--horizontal spaced-bottom--none"><li id="menu-item-22" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-22 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/about">About SQLServerCentral</a></li>
+<li id="menu-item-3673197" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-3673197 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/contact-us">Contact Us</a></li>
+<li id="menu-item-24" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-24 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/terms">Terms of Use</a></li>
+<li id="menu-item-26" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-26 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/privacy">Privacy Policy</a></li>
+<li id="menu-item-28" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-28 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/contribute">Contribute</a></li>
+<li id="menu-item-30" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-30 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/contributors">Contributors</a></li>
+<li id="menu-item-3425913" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-3425913 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/author">Authors</a></li>
+<li id="menu-item-3426090" class="menu-item menu-item-type-post_type menu-item-object-page spaced-bottom--none spaced-right menu-item-3426090 spaced-bottom--none spaced-right--tight"><a href="https://www.sqlservercentral.com/newsletter-archive">Newsletters</a></li>
+</ul>            </div>
+
+            <div class="grid__col grid__col--span-2-of-12 grid__col--push-1-of-12 grid__col--span-12-of-12--medium grid__col--push-0-of-12--medium flex flex-align--center flex-justify--end">
+                <a href="https://www.red-gate.com/" target="_blank" class="link-image"><img src="https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/images/footer/redgate.svg" alt=""/></a>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- / FOOTER -->
+
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_utilities_ajax_combined_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-utilities/js/ajax-combined.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-performance/js/ssc-lazy-load.min.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_related_forum_topics_top_comments_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","post_id":"3792395"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-related-forum-topics/js/top-comments.min.js?ver=2020-06-03'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_star_ratings_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-star-ratings/js/interactive.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=sql&#038;lang=vb'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlighting/inc/lexers/lang-vs.js'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/js/highlight.pack.js'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-syntax-highlightjs/js/init.js'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var ssc_visitor_counter_data = {"ajax_url":"https:\/\/www.sqlservercentral.com\/wp-admin\/admin-ajax.php","post_id":"3792395","is_singular":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/mu-plugins/ssc/ssc-visitor-counter/js/ssc-visitor-counter.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/bbpress/templates/default/js/editor.js?ver=2.5.14-6684'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var SSC2018 = {"templateUrl":"https:\/\/www.sqlservercentral.com\/wp-content\/themes\/ssc-twentyeighteen"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/themes/ssc-twentyeighteen/js/sqlservercentral.min.js?ver=2020-06-03'></script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/gd-bbpress-attachments/js/front.js?ver=3.1_b2302_free'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var newsletter = {"messages":{"email_error":"Email address is not correct","name_error":"Name is required","surname_error":"Last name is required","privacy_error":"You must accept the privacy policy"},"profile_max":"20"};
+/* ]]> */
+</script>
+<script type='text/javascript' defer src='https://www.sqlservercentral.com/wp-content/plugins/newsletter/subscription/validate.js?ver=5.8.9'></script>
+<script type='text/javascript' src='https://www.sqlservercentral.com/wp-includes/js/wp-embed.min.js?ver=5.1.1'></script>
+
+</body>
+</html>
+
+<!--
+Performance optimized by W3 Total Cache. Learn more: https://www.w3-edge.com/products/
+
+Page Caching using redis 
+
+Served from: sqlservercentral.com @ 2020-10-09 13:39:46 by W3 Total Cache
+-->
